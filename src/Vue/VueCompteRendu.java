@@ -58,9 +58,10 @@ public class VueCompteRendu extends javax.swing.JFrame {
         jButtonCompteRenduNouveau = new javax.swing.JButton();
         jTextFieldCompteRenduNumeroRapport = new javax.swing.JTextField();
         jButtonCompteRenduFermer = new javax.swing.JButton();
-        jLabelRapportsVisiteLogo = new javax.swing.JLabel();
         jLabelVisiteur = new javax.swing.JLabel();
         jComboBoxVisiteur = new javax.swing.JComboBox();
+        jButtonCompteRenduAjouter = new javax.swing.JButton();
+        jLabelRapportsVisiteLogo = new javax.swing.JLabel();
 
         jComboBoxTableau.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
@@ -72,7 +73,7 @@ public class VueCompteRendu extends javax.swing.JFrame {
         jTextFieldTitreRapportVisite.setForeground(new java.awt.Color(51, 51, 153));
         jTextFieldTitreRapportVisite.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jTextFieldTitreRapportVisite.setText("RAPPORTS DE VISITE");
-        getContentPane().add(jTextFieldTitreRapportVisite, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 11, 570, -1));
+        getContentPane().add(jTextFieldTitreRapportVisite, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 0, 570, -1));
 
         jLabelRapportsVisiteNumeroRapport.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabelRapportsVisiteNumeroRapport.setForeground(new java.awt.Color(160, 160, 160));
@@ -128,15 +129,12 @@ public class VueCompteRendu extends javax.swing.JFrame {
         jTextFieldCompteRenduNumeroRapport.setEditable(false);
         jTextFieldCompteRenduNumeroRapport.setForeground(new java.awt.Color(160, 160, 160));
         jTextFieldCompteRenduNumeroRapport.setText("(NuméroAuto)");
-        getContentPane().add(jTextFieldCompteRenduNumeroRapport, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 50, -1, -1));
+        getContentPane().add(jTextFieldCompteRenduNumeroRapport, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 50, 40, -1));
 
         jButtonCompteRenduFermer.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButtonCompteRenduFermer.setForeground(new java.awt.Color(51, 51, 153));
         jButtonCompteRenduFermer.setText("Fermer");
         getContentPane().add(jButtonCompteRenduFermer, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 350, -1, -1));
-
-        jLabelRapportsVisiteLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Vue/gsb.png"))); // NOI18N
-        getContentPane().add(jLabelRapportsVisiteLogo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 140, 630, 270));
 
         jLabelVisiteur.setForeground(new java.awt.Color(51, 51, 153));
         jLabelVisiteur.setText("Visiteur");
@@ -145,6 +143,13 @@ public class VueCompteRendu extends javax.swing.JFrame {
         jComboBoxVisiteur.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         jComboBoxVisiteur.setNextFocusableComponent(jLabelRapportsVisiteLogo);
         getContentPane().add(jComboBoxVisiteur, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 90, 150, -1));
+
+        jButtonCompteRenduAjouter.setForeground(new java.awt.Color(51, 51, 153));
+        jButtonCompteRenduAjouter.setText("Ajouter");
+        getContentPane().add(jButtonCompteRenduAjouter, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 350, -1, -1));
+
+        jLabelRapportsVisiteLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Vue/gsb.png"))); // NOI18N
+        getContentPane().add(jLabelRapportsVisiteLogo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 630, 410));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -226,6 +231,14 @@ public class VueCompteRendu extends javax.swing.JFrame {
         return jTextFieldCompteRenduDateRapport;
     }
 
+    public JButton getjButtonCompteRenduAjouter() {
+        return jButtonCompteRenduAjouter;
+    }
+
+    public void setjButtonCompteRenduAjouter(JButton jButtonCompteRenduAjouter) {
+        this.jButtonCompteRenduAjouter = jButtonCompteRenduAjouter;
+    }
+
     public JTextField getjTextFieldCompteRenduMotifVisite() {
         return jTextFieldCompteRenduMotifVisite;
     }
@@ -257,6 +270,7 @@ public class VueCompteRendu extends javax.swing.JFrame {
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonCompteRenduAjouter;
     private javax.swing.JButton jButtonCompteRenduDetails;
     private javax.swing.JButton jButtonCompteRenduFermer;
     private javax.swing.JButton jButtonCompteRenduNouveau;

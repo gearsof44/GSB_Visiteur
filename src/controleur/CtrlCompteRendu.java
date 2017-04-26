@@ -11,7 +11,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -42,6 +46,7 @@ public class CtrlCompteRendu implements WindowListener, ActionListener{
         this.vue.getjButtonCompteRenduDetails().addActionListener(this);
         this.vue.getjButtonCompteRenduFermer().addActionListener(this);
         this.vue.getjButtonCompteRenduNouveau().addActionListener(this);
+        this.vue.getjButtonCompteRenduAjouter().addActionListener(this);
         this.vue.getjButtonCompteRenduPrécédent().addActionListener(this);
         this.vue.getjButtonCompteRenduSuivant().addActionListener(this);
         this.vue.getjComboBoxCompteRenduPraticien().addActionListener(this);
@@ -50,6 +55,7 @@ public class CtrlCompteRendu implements WindowListener, ActionListener{
         this.vue.getjTextFieldCompteRenduMotifVisite().addActionListener(this);
         this.vue.getjTextFieldCompteRenduNumeroRapport().addActionListener(this);
         this.vue.getjTextFieldTitreCompteRendu().addActionListener(this);
+        this.vue.getjButtonCompteRenduAjouter().setEnabled(false);
         // préparer l'état iniitial de la vue
         index_compte_rendu = 0;
         rechercherTousVisiteur();
@@ -70,7 +76,6 @@ public class CtrlCompteRendu implements WindowListener, ActionListener{
     private void rechercherTousVisiteur() {
         List<Visiteur> lesVisiteurs2 = null;
         try {
-            System.out.println("before select all");
              lesVisiteurs2 = DaoVisiteur.selectAll();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(getVue(), "CtrlLesVisiteurs - échec de sélection des visiteurs");
@@ -179,6 +184,25 @@ public class CtrlCompteRendu implements WindowListener, ActionListener{
                 Logger.getLogger(CtrlCompteRendu.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        if (e.getSource().equals(vue.getjButtonCompteRenduNouveau())){
+            try {
+                viderCompteRendu();
+                getVue().getjButtonCompteRenduAjouter().setEnabled(true);
+            } catch (SQLException ex) {
+                Logger.getLogger(CtrlCompteRendu.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        if (e.getSource().equals(vue.getjButtonCompteRenduAjouter())){
+            try {
+                ajouterCompteRendu();
+                getVue().getjButtonCompteRenduAjouter().setEnabled(false);
+            } catch (SQLException ex) {
+                Logger.getLogger(CtrlCompteRendu.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ParseException ex) {
+                Logger.getLogger(CtrlCompteRendu.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
     }
 
     private void quitter() {
@@ -196,14 +220,35 @@ public class CtrlCompteRendu implements WindowListener, ActionListener{
             index_compte_rendu += 1;
         }
         Rapport le_rapport = rapport_list.get(index_compte_rendu);
-        System.out.println(le_rapport.getRap_bilan());
         Praticien le_praticien = le_rapport.getPra_num();
-        System.out.println(le_praticien);
         getVue().getModeleComboBoxPraticien().setSelectedItem(le_praticien);
         String str_date = le_rapport.getRap_date().toString();
+        getVue().getjTextFieldCompteRenduNumeroRapport().setText(Integer.toString(le_rapport.getRap_num()));
         getVue().getjTextFieldCompteRenduDateRapport().setText(str_date);
         getVue().getjTextFieldCompteRenduMotifVisite().setText(le_rapport.getRap_motif());
         getVue().getjTextFieldCompteRenduBilan().setText(le_rapport.getRap_bilan());
+    }
+    
+    private void ajouterCompteRendu() throws SQLException, ParseException {
+        Visiteur visiteur = (Visiteur) getVue().getModeleComboBoxVisiteur().getSelectedItem();
+        Praticien praticien = (Praticien) getVue().getModeleComboBoxPraticien().getSelectedItem();
+        DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+        String vis_mat = visiteur.getVis_matricule();
+        int rap_num = DaoRapport.getMaxRapNum() + 1;
+        int pra_num = praticien.getPra_num();
+        String str_date = getVue().getjTextFieldCompteRenduDateRapport().getText();
+        Date date = df.parse(str_date);
+        String bilan = getVue().getjTextFieldCompteRenduBilan().getText();
+        String motif = getVue().getjTextFieldCompteRenduMotifVisite().getText();
+        Rapport inserted_rapport = new Rapport(visiteur,rap_num,praticien,date,bilan,motif);
+        DaoRapport.insert(vis_mat, pra_num, inserted_rapport);
+    }
+    
+    private void viderCompteRendu() throws SQLException{
+        getVue().getjTextFieldCompteRenduBilan().setText("");
+        getVue().getjTextFieldCompteRenduDateRapport().setText("");
+        getVue().getjTextFieldCompteRenduMotifVisite().setText("");
+        getVue().getjTextFieldCompteRenduNumeroRapport().setText(Integer.toString(DaoRapport.getMaxRapNum()+1));
     }
     
     private void compteRenduSuivant(Visiteur visiteur) throws SQLException{

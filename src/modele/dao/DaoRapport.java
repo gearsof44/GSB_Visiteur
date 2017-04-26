@@ -82,23 +82,43 @@ public class DaoRapport {
         return lesRapports;
     }
 
-    
-    //TO DO
-//        public static int insert(int idAdresse, Adresse uneAdresse) throws SQLException {
-//        int nb;
-//        Jdbc jdbc = Jdbc.getInstance();
-//        String requete;
-//        ResultSet rs;
-//        PreparedStatement pstmt;
-//        requete = "INSERT INTO ADRESSE (ID, RUE, CDP , VILLE) VALUES (?, ?, ?, ?)";
-//        pstmt = jdbc.getConnexion().prepareStatement(requete);
-//        pstmt.setInt(1, idAdresse);
-//        pstmt.setString(2, uneAdresse.getRue());
-//        pstmt.setString(3, uneAdresse.getCp());
-//        pstmt.setString(4, uneAdresse.getVille());
-//        nb = pstmt.executeUpdate();
-//        return nb;
-//    }
+
+        public static int insert(String vis_matricule, int pra_num, Rapport unRapport) throws SQLException {
+        int nb;
+        java.sql.Date sqlDate = new java.sql.Date(unRapport.getRap_date().getTime());
+        Jdbc jdbc = Jdbc.getInstance();
+        String requete;
+        ResultSet rs;
+        PreparedStatement pstmt;
+        requete = "INSERT INTO RAPPORT_VISITE (VIS_MATRICULE, RAP_NUM, PRA_NUM , RAP_DATE, RAP_BILAN, RAP_MOTIF) VALUES (?, ?, ?, ?, ?, ?)";
+        pstmt = jdbc.getConnexion().prepareStatement(requete);
+        pstmt.setString(1, vis_matricule);
+        pstmt.setInt(2, unRapport.getRap_num());
+        pstmt.setInt(3, pra_num);
+        pstmt.setDate(4,sqlDate);
+        pstmt.setString(5, unRapport.getRap_bilan());
+        pstmt.setString(6, unRapport.getRap_motif());
+        nb = pstmt.executeUpdate();
+        pstmt.close();
+        return nb;
+    }
+        
+    public static int getMaxRapNum() throws SQLException {
+        int max_rap_num = 0;
+        ResultSet rs;
+        PreparedStatement pstmt;
+        Jdbc jdbc = Jdbc.getInstance();
+        // préparer la requête
+        String requete = "SELECT * FROM RAPPORT_VISITE WHERE RAP_NUM=(SELECT MAX(RAP_NUM) FROM RAPPORT_VISITE)";
+        pstmt = jdbc.getConnexion().prepareStatement(requete);
+        rs = pstmt.executeQuery();
+        while (rs.next()) {
+            max_rap_num = rs.getInt("RAP_NUM");
+        }
+        pstmt.close();
+        rs.close();
+        return max_rap_num;
+    }
     
     /**
      * 
